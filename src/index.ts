@@ -12,7 +12,7 @@ import {Issuer, Client, TokenSet} from 'openid-client';
 import asyncRetry = require('async-retry');
 import * as express from 'express';
 import {Express, Response} from 'express';
-import {nanoid} from 'nanoid/async';
+import {nanoid} from 'nanoid';
 import ms = require('ms');
 import * as jwt from 'jsonwebtoken';
 import {URL} from 'url';
@@ -57,7 +57,7 @@ const TOKEN_BEARER = 'Bearer';
 export default class OidcPlugin
   implements IPluginAuth<OidcPluginConfig>, IPluginMiddleware<OidcPluginConfig>
 {
-  private readonly pluginName = 'verdaccio-openid-connect';
+  private readonly pluginName = 'verdaccio-openid-connect2';
 
   private config: OidcPluginConfig;
   private options: PluginOptions<OidcPluginConfig>;
@@ -81,7 +81,7 @@ export default class OidcPlugin
     
     this.options.config.middlewares = {
       ...options.config.middlewares,
-      'openid-connect': {oidcPluginInstance: this},
+      'openid-connect2': {oidcPluginInstance: this},
     };
     this.logger = options.logger;
 
@@ -205,7 +205,8 @@ export default class OidcPlugin
         )}`,
       );
     }
-    return username;
+
+    return username.split('@')[0].toLocaleLowerCase()
   }
 
   private getRoles(tokenSet: TokenSet): string[] {

@@ -4,7 +4,7 @@ storage: /verdaccio/storage/data
 plugins: /verdaccio/plugins
 
 auth:
-  openid-connect:
+  openid-connect2:
     publicUrl: http://localhost:4873
 
     ###
